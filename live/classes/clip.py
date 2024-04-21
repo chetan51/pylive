@@ -96,6 +96,16 @@ class Clip:
         """
         self.live.cmd("/live/clip/stop", (self.track.index, self.index))
         self.track.playing = False
+    
+    def get_notes(self):
+        """
+        Gets notes in the clip.
+
+        Returns: [[pitch, start_time, duration, velocity, mute], [...]]
+        """
+        notes = self.live.query("/live/clip/get/notes", (self.track.index, self.index,))[2:]
+        n = 5
+        return [notes[i * n:(i + 1) * n] for i in range((len(notes) + n - 1) // n )] 
 
     def add_note(self,
                  pitch: int,
